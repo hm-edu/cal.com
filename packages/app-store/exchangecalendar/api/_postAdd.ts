@@ -14,7 +14,7 @@ import { CalendarService } from "../lib";
 const formSchema = z
   .object({
     url: z.string().url(),
-    username: z.string().email(),
+    username: z.string(),
     password: z.string(),
     authenticationMethod: z.number().default(ExchangeAuthentication.STANDARD),
     exchangeVersion: z.number().default(ExchangeVersion.Exchange2016),

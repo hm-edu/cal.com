@@ -22,7 +22,7 @@ interface IFormData {
 const schema = z
   .object({
     url: z.string().url(),
-    username: z.string().email(),
+    username: z.string(),
     password: z.string(),
     authenticationMethod: z.number().default(ExchangeAuthentication.STANDARD),
     exchangeVersion: z.number().default(ExchangeVersion.Exchange2016),
@@ -36,8 +36,10 @@ export default function ExchangeSetup() {
   const [errorMessage, setErrorMessage] = useState("");
   const form = useForm<IFormData>({
     defaultValues: {
-      authenticationMethod: ExchangeAuthentication.STANDARD,
       exchangeVersion: ExchangeVersion.Exchange2016,
+      authenticationMethod: ExchangeAuthentication.NTLM,
+      useCompression: true,
+      url: "https://xmail.mwn.de/EWS/Exchange.asmx",
     },
     resolver: zodResolver(schema),
   });
@@ -100,11 +102,11 @@ export default function ExchangeSetup() {
                       placeholder="https://example.com/Ews/Exchange.asmx"
                       inputMode="url"
                     />
-                    <EmailField
+                    <TextField
                       required
                       {...form.register("username")}
-                      label={t("email_address")}
-                      placeholder="john.doe@example.com"
+                      label={t("username")}
+                      placeholder="ads\hm-mustermann"
                     />
                     <PasswordField
                       required
@@ -119,7 +121,7 @@ export default function ExchangeSetup() {
                         <SelectField
                           label={t("exchange_authentication")}
                           options={authenticationMethods}
-                          defaultValue={authenticationMethods[0]}
+                          defaultValue={authenticationMethods[1]}
                           onChange={async (authentication) => {
                             if (authentication) {
                               onChange(authentication.value);
@@ -149,6 +151,7 @@ export default function ExchangeSetup() {
                     <Switch
                       label={t("exchange_compression")}
                       name="useCompression"
+                      checked={true}
                       onCheckedChange={async (alt) => {
                         form.setValue("useCompression", alt);
                       }}
